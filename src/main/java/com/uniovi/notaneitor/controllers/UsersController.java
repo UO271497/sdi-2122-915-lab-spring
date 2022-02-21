@@ -20,11 +20,19 @@ public class UsersController {
     private UsersService usersService;
     @Autowired
     private SecurityService securityService;
+
+
     @RequestMapping("/user/list")
     public String getListado(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
         return "user/list";
     }
+    @RequestMapping("/user/list/update")
+    public String updateList(Model model) {
+        model.addAttribute("usersList", usersService.getUsers());
+        return "user/list:tableUsers";
+    }
+
     @RequestMapping(value = "/user/add")
     public String getUser(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
@@ -52,12 +60,16 @@ public class UsersController {
         return "user/edit";
     }
     @RequestMapping(value = "/user/edit/{id}", method = RequestMethod.POST)
-    public String setEdit(Model model, @PathVariable Long id, @ModelAttribute User user) {
-        usersService.addUser(user);
+    public String setEdit(@ModelAttribute User user, @PathVariable Long id) {
+        User originalUser = usersService.getUser(id);
+
+        originalUser.setDni(user.getDni());
+        originalUser.setName(user.getName());
+        originalUser.setLastName(user.getLastName());
+
+        usersService.addUser(originalUser);
         return "redirect:/user/details/" + id;
     }
-
-
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
@@ -69,15 +81,18 @@ public class UsersController {
         securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
     }
+
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signup(Model model) {
         model.addAttribute("user", new User());
         return "signup";
     }
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
         return "login";
     }
+
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public String home(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -86,4 +101,6 @@ public class UsersController {
         model.addAttribute("markList", activeUser.getMarks());
         return "home";
     }
+
+
 }
