@@ -3,15 +3,21 @@ package com.uniovi.notaneitor.controllers;
 import com.uniovi.notaneitor.entities.*;
 import com.uniovi.notaneitor.services.MarksService;
 import com.uniovi.notaneitor.services.UsersService;
+import com.uniovi.notaneitor.validators.AddMarksValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MarksController {
     @Autowired //Inyectar el servicio
     private MarksService marksService;
+
+    @Autowired
+    private AddMarksValidator addMarksValidator;
 
     @Autowired
     private UsersService usersService;
@@ -27,11 +33,9 @@ public class MarksController {
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list::tableMarks";
     }
-    @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
-    public String setMark(@ModelAttribute Mark mark) {
-        marksService.addMark(mark);
-        return "redirect:/mark/list";
-    }
+
+
+
 
     @RequestMapping("/mark/details/{id}")
     public String getDetail(Model model, @PathVariable Long id) {
@@ -59,9 +63,12 @@ public class MarksController {
     }
 
     @RequestMapping(value = "/mark/edit/{id}", method = RequestMethod.POST)
-    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id) {
+    public String setEdit(@ModelAttribute Mark mark,BindingResult result, @PathVariable Long id) {
+        addMarksValidator.validate(mark,result);
+        if(result.hasErrors()){
+            return "mark/edit";
+        }
         Mark originalMark = marksService.getMark(id);
-        // modificar solo score y description
         originalMark.setScore(mark.getScore());
         originalMark.setDescription(mark.getDescription());
         marksService.addMark(originalMark);
@@ -69,5 +76,22 @@ public class MarksController {
     }
 
 
+    @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
+    public String setMark(Model model,@Validated Mark mark, BindingResult result) {
+        addMarksValidator.validate(mark,result);
+        if(result.hasErrors()){
+            model.addAttribute("usersList",usersService.getUsers());
+            return "mark/add";
+        }
+        marksService.addMark(mark);
+        return "redirect:/mark/list";
+    }
+
+    @RequestMapping(value = "/mark/add", method = RequestMethod.GET)
+    public String setMark(Model model) {
+        model.addAttribute("mark", new Mark());
+        model.addAttribute("usersList",usersService.getUsers());
+        return "mark/add";
+    }
 
 }
