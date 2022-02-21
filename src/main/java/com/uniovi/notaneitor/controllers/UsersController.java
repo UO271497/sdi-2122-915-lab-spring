@@ -31,7 +31,7 @@ public class UsersController {
     @RequestMapping("/user/list/update")
     public String updateList(Model model) {
         model.addAttribute("usersList", usersService.getUsers());
-        return "user/list:tableUsers";
+        return "user/list::tableUsers";
     }
 
     @RequestMapping(value = "/user/add")
@@ -39,6 +39,7 @@ public class UsersController {
         model.addAttribute("usersList", usersService.getUsers());
         return "user/add";
     }
+
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public String setUser(@ModelAttribute User user) {
         usersService.addUser(user);
