@@ -4,12 +4,18 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.notaneitor.entities.*;
 import com.uniovi.notaneitor.services.UsersService;
 import org.springframework.security.core.Authentication;
+import com.uniovi.notaneitor.validators.SignUpFormValidator;
+
 @Controller
 public class UsersController {
+    @Autowired
+    private SignUpFormValidator signUpFormValidator;
     @Autowired
     private UsersService usersService;
     @Autowired
@@ -52,11 +58,21 @@ public class UsersController {
     }
 
 
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup(@ModelAttribute("user") User user, Model model) {
+    public String signup(@Validated User user, BindingResult result) {
+        signUpFormValidator.validate(user,result);
+        if(result.hasErrors()){
+            return "signup";
+        }
         usersService.addUser(user);
         securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
+    }
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String signup(Model model) {
+        model.addAttribute("user", new User());
+        return "signup";
     }
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
