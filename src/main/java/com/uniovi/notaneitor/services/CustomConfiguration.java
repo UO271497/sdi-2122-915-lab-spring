@@ -18,6 +18,10 @@ import org.springframework.data.domain.PageRequest;
 public class CustomConfiguration implements WebMvcConfigurer {
 
 
+    @Value("${spring.data.web.pageable.page-parameter}")
+    private int page;
+    @Value("${spring.data.web.pageable.default-page-size}")
+    private int size;
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -26,8 +30,6 @@ public class CustomConfiguration implements WebMvcConfigurer {
     }
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        int page=1;
-        int size=3;
 
         PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
         resolver.setFallbackPageable(PageRequest.of(page, size));
