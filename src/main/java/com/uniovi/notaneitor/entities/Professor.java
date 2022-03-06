@@ -1,6 +1,5 @@
 package com.uniovi.notaneitor.entities;
 
-import javax.annotation.processing.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,22 +11,22 @@ public class Professor {
     private Long id;
     private String dni;
     private String name;
-    private String apellidos;
-    private String categoria;
+    private String surname;
+    private String category;
 
     public Professor(){
 
     }
-    public Professor(Long id, String dni, String name, String apellidos, String categoria){
+    public Professor(Long id, String dni, String name, String surname, String categoria){
         setId(id);
         setDni(dni);
         setName(name);
-        setApellidos(apellidos);
-        setCategoria(categoria);
+        setSurname(surname);
+        setCategory(categoria);
     }
     @Override
     public String toString(){
-        return "Profesor con dni: "+dni+", con nombre "+name+" y apellidos: "+apellidos+". Categoria: "+categoria;
+        return "Profesor con dni: "+dni+", con nombre "+name+" y apellidos: "+ surname +". Categoria: "+ category;
     }
     public Long getId() {
         return id;
@@ -53,20 +52,20 @@ public class Professor {
         this.name = name;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setSurname(String apellidos) {
+        this.surname = apellidos;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setCategory(String categoria) {
+        this.category = categoria;
     }
 }
 

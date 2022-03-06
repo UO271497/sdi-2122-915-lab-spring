@@ -36,9 +36,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/professor/list">Ver profesores</a>
-                    </div>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/professor/add" sec:authorize="hasRole('ROLE_ADMIN')">Añadir profesor</a>
+                        <a class="dropdown-item" href="/professor/details" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_PROFESSOR')">Detalles de profesor</a>
+                        <a class="dropdown-item" href="/professor/edit" sec:authorize="hasRole('ROLE_ADMIN')">Editar profesor</a>
                     </div>
                 </li>
             </ul>
