@@ -1,9 +1,14 @@
 package com.uniovi.notaneitor;
 
+import com.uniovi.notaneitor.pageobjects.PO_HomeView;
+import com.uniovi.notaneitor.pageobjects.PO_Properties;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -49,28 +54,39 @@ class Sdi2122915LabSpringApplicationTests {
     @Test
     @Order(1)
     void PR01(){
-
+        PO_HomeView.checkWelcomeToPage(driver, PO_Properties
+                .getSPANISH());
     }
     @Test
     @Order(1)
     void PR02(){
-
+        List<WebElement> welcomeMessageElement = PO_HomeView.getWelcomeMessageText(driver,
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(welcomeMessageElement.get(0).getText(),
+                PO_HomeView.getP().getString("welcome.message", PO_Properties.getSPANISH()));
     }
+    //PR02. Opción de navegación. Pinchar en el enlace Registro en la página home
     @Test
     @Order(1)
     void PR03(){
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
 
     }
+    //PR03. Opción de navegación. Pinchar en el enlace Identifícate en la página home
     @Test
-    @Order(1)
-    void PR04(){
-
+    @Order(4)
+    public void PR04() {
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
     }
+
+    //PR04. Opción de navegación. Cambio de idioma de Español a Inglés y vuelta a Español
     @Test
-    @Order(1)
-    void PR05(){
-
+    @Order(5)
+    public void PR05() {
+        PO_HomeView.checkChangeLanguage(driver, "btnSpanish", "btnEnglish",
+                PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
     }
+
     @Test
     @Order(1)
     void PR06(){
