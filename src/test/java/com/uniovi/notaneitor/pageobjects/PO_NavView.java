@@ -27,6 +27,13 @@ public class PO_NavView extends PO_View{
         //Tiene que haber un sólo elemento.
         Assertions.assertEquals(1, elements.size());
     }
+    public static void clickElement(WebDriver driver, String criterio, String targetText){
+        List<WebElement> elements = SeleniumUtils.waitLoadElementsBy(driver, criterio, targetText, getTimeout());
+        //Tiene que haber un sólo elemento.
+        Assertions.assertEquals(1, elements.size());
+        elements.get(0).click();
+    }
+
     /**
      * Selecciona el enlace de idioma correspondiente al texto textLanguage
      * @param driver: apuntando al navegador abierto actualmente.
