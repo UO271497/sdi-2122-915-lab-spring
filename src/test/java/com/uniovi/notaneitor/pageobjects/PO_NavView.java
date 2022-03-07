@@ -27,11 +27,19 @@ public class PO_NavView extends PO_View{
         //Tiene que haber un sólo elemento.
         Assertions.assertEquals(1, elements.size());
     }
-    public static void clickElement(WebDriver driver, String criterio, String targetText){
-        List<WebElement> elements = SeleniumUtils.waitLoadElementsBy(driver, criterio, targetText, getTimeout());
-        //Tiene que haber un sólo elemento.
-        Assertions.assertEquals(1, elements.size());
+    static public void clickMenu(WebDriver driver,String idMenu,String option){
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//li[contains(@id, '"+idMenu+"')]/a");
         elements.get(0).click();
+        //Esperamos a que aparezca la opción de añadir nota: //a[contains(@href, 'mark/add')]
+        elements = PO_View.checkElementBy(driver, "free", "//a[contains(@href, '"+option+"')]");
+        elements.get(0).click();
+    }
+
+    static public void goToPage(WebDriver driver,int page){
+        //Esperamos a que se muestren los enlaces de paginación de la lista de notas
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        //Nos vamos a la última página
+        elements.get(page).click();
     }
 
     /**
@@ -51,5 +59,6 @@ public class PO_NavView extends PO_View{
                 getTimeout());
         Selectedlanguage.get(0).click();
     }
+
 
 }
